@@ -5,6 +5,6 @@ To compile a C file, use the `/compile` endpoint and POST your sourcecode embedd
 
 ```
 {
-  "sourceCode": "CODE HERE"
+  "sourceCode": "BASE64 ENCODED CODE HERE"
 }
 ```

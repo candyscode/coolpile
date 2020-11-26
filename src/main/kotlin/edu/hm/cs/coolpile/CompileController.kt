@@ -55,7 +55,9 @@ class CompileController {
 
         val assemblyFile = File("$tempCompileFileName.s")
         val assembly = assemblyFile.readText(Charsets.UTF_8)
+
         assemblyFile.delete()
+        File("$tempCompileFileName.c").delete()
 
         // println("\nCompilation:\n\n${assembly.prependIndent("| ")}\n")
 
