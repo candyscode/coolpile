@@ -47,11 +47,13 @@ class CompileController {
             throw GCCException(errorMessage)
         }
 
-        val compilation = File("$tempCompileFileName.s").readText(Charsets.UTF_8)
+        val assemblyFile = File("$tempCompileFileName.s")
+        val assembly = assemblyFile.readText(Charsets.UTF_8)
+        assemblyFile.delete()
 
-        println("\nCompilation:\n\n${compilation.prependIndent("| ")}\n")
+        println("\nCompilation:\n\n${assembly.prependIndent("| ")}\n")
 
-        return CompileRequest(Base64Utils.encodeToString(compilation.toByteArray()))
+        return CompileRequest(Base64Utils.encodeToString(assembly.toByteArray()))
     }
 
     companion object {
