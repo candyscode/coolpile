@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import java.lang.IllegalArgumentException
 import java.util.*
 
 @ControllerAdvice
@@ -28,6 +29,17 @@ class GlobalExceptionHandler {
                 status = httpStatus.name,
                 errorType = "Service not found",
                 message = ex.message,
+                time = Date().toString()
+        )
+        return ResponseEntity<Error>(errorDTO, httpStatus)
+    }
+    @ExceptionHandler(IllegalArgumentException::class)
+    fun generateServiceNotFoundException(ex: IllegalArgumentException): ResponseEntity<Error> {
+        val httpStatus = HttpStatus.BAD_REQUEST
+        val errorDTO = Error(
+                status = httpStatus.name,
+                errorType = "Illegal Arguments for Request",
+                message = ex.message ?: "",
                 time = Date().toString()
         )
         return ResponseEntity<Error>(errorDTO, httpStatus)
