@@ -45,7 +45,7 @@ fun CompileRequest.compileWithService(service: AvailableService): CompileResult 
         throw CompilationException(errorMessage)
     }
 
-    val assemblyFile = File("${CompileController.tempCompileFileName}.s")
+    val assemblyFile = File("${CompileController.tempCompileFileName}${service.outputFileSuffix}")
     val assembly = assemblyFile.readText(Charsets.UTF_8)
 
     assemblyFile.delete()
