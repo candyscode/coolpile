@@ -1,0 +1,15 @@
+{
+  "services": [
+    {
+      "cmd": "gcc -S temp.c",
+      "name": "riscv",
+      "fileSuffix" : ".c"
+
+    },
+    {
+      "cmd": "gcc -S temp.c",
+      "name": "arm",
+      "fileSuffix" : ".c"
+    }
+  ]
+}
