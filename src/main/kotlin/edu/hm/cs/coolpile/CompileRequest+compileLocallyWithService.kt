@@ -13,14 +13,14 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.milliseconds
 
 @ExperimentalTime
-fun CompileRequest.compileWithService(service: AvailableService): CompileResult {
+fun CompileRequest.compileLocallyWithService(service: AvailableService, sessionId: String): CompileResult {
     val timestampBefore = System.currentTimeMillis()
 
     val sourceCode = String(Base64Utils.decodeFromString(sourceCode), Charsets.UTF_8)
 
     println("Compile job started.")
 
-    File("${CompileController.tempCompileFileName}${service.fileSuffix}").writeText(sourceCode)
+    File("$sessionId${service.fileSuffix}").writeText(sourceCode)
 
     val compilationProcess = Runtime.getRuntime().exec(service.cmd)
     println("Waiting for compiling job to finish...")
@@ -45,11 +45,11 @@ fun CompileRequest.compileWithService(service: AvailableService): CompileResult 
         throw CompilationException(errorMessage)
     }
 
-    val assemblyFile = File("${CompileController.tempCompileFileName}${service.outputFileSuffix}")
+    val assemblyFile = File("$sessionId${service.outputFileSuffix}")
     val assembly = assemblyFile.readText(Charsets.UTF_8)
 
     assemblyFile.delete()
-    File("${CompileController.tempCompileFileName}.c").delete()
+    File("$sessionId.c").delete()
 
     return CompileResult(
             assembly = Base64Utils.encodeToString(assembly.toByteArray()),
