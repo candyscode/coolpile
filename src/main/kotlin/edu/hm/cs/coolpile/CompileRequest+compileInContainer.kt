@@ -13,7 +13,7 @@ fun CompileRequest.compileInContainer(sessionId: String): CompileResult {
 
     File("$sessionId.c").writeText(sourceCode)
 
-    val compilationProcess = Runtime.getRuntime().exec("./src/main/bash/compile.sh")
+    val compilationProcess = Runtime.getRuntime().exec("./src/main/bash/compile.sh $sessionId")
     val exitValue = compilationProcess.waitFor()
 
     println("Exited with value $exitValue")
@@ -24,6 +24,7 @@ fun CompileRequest.compileInContainer(sessionId: String): CompileResult {
     assemblyFile.delete()
     File("$sessionId.c").delete()
 
+    // TODO: Calculate execution time
     return CompileResult(
             assembly = Base64Utils.encodeToString(assembly.toByteArray()),
             compilationTime = "nope"

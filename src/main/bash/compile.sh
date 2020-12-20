@@ -1,9 +1,9 @@
 #!/bin/bash
-echo "Compile Script started."
-docker run -t -d --name compi gcc-compileworker
-docker cp test.c compi:/test.c
-docker exec compi gcc -S test.c
-docker cp compi:/test.s .
-docker stop compi
-docker rm compi
-# TODO: Set name dynamically with sessionId
+SESSION_ID="$1"
+
+docker run -t -d --name "$SESSION_ID" gcc-compileworker
+docker cp "$SESSION_ID".c "$SESSION_ID":/"$SESSION_ID".c
+docker exec "$SESSION_ID" gcc -S "$SESSION_ID".c
+docker cp "$SESSION_ID":/"$SESSION_ID".s .
+docker stop "$SESSION_ID"
+docker rm "$SESSION_ID"
