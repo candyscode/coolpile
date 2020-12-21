@@ -28,7 +28,8 @@ A service name always consists of the input language and the target ISA separate
 
 ### 3. Query service to compile your code
 
-To use the `c-riscv` service, send a POST request to `/services/riscv`. If for example a Java Compilation Service (called `javac`) would exist as well, it could be queried by accessing `/services/javac` via POST.
+To use the `c-riscv` service, send a POST request to `/services/c-riscv`. All other available services can be invoked in the same way. `c-x86`'s endpoint would be 
+`/services/c-x86`.
 
 To submit your sourcecode, encode it in Base64 (online tools are widely available) and wrap it in the following JSON format:
 
