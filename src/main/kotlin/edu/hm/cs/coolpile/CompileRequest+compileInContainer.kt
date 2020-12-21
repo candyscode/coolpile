@@ -5,8 +5,12 @@ import edu.hm.cs.coolpile.dto.CompileRequest
 import edu.hm.cs.coolpile.dto.CompileResult
 import org.springframework.util.Base64Utils
 import java.io.File
+import kotlin.time.ExperimentalTime
+import kotlin.time.milliseconds
 
+@ExperimentalTime
 fun CompileRequest.compileInContainer(sessionId: String, service: AvailableService): CompileResult {
+    val timestampBefore = System.currentTimeMillis()
 
     val sourceCode = String(Base64Utils.decodeFromString(sourceCode), Charsets.UTF_8)
     File("$sessionId.c").writeText(sourceCode)
@@ -29,9 +33,8 @@ fun CompileRequest.compileInContainer(sessionId: String, service: AvailableServi
     assemblyFile.delete()
     File("$sessionId.c").delete()
 
-    // TODO: Calculate execution time
     return CompileResult(
             assembly = Base64Utils.encodeToString(assembly.toByteArray()),
-            compilationTime = "nope"
+            compilationTime = (System.currentTimeMillis() - timestampBefore).milliseconds.toString()
     )
 }
