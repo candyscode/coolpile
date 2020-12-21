@@ -23,15 +23,6 @@ class CompileController {
         )
     }
 
-    @PostMapping("/local/**")
-    fun localServiceWildcard(request: HttpServletRequest, @RequestBody compileRequest: CompileRequest): CompileResult {
-        val apiEndpoint = request.requestURI.removePrefix("/local/").throwIfSubPathIsEmpty()
-        return compileRequest.compileLocallyWithService(
-                service = configuration.getServiceByName(apiEndpoint),
-                sessionId = request.session.id
-        )
-    }
-
     @GetMapping("/services")
     fun services(): ServiceConfiguration = configuration
 

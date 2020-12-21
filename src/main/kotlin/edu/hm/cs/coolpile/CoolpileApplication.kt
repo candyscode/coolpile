@@ -35,19 +35,7 @@ private fun AvailableService.createDockerImageIfNecessary() {
         println("Docker image for service $name doesn't exist and will be created now.")
 
         val command = arrayOf("./src/main/shell/createDockerImage.sh", name, install)
-        val compilationProcess = Runtime.getRuntime().exec(command)
-        compilationProcess.waitFor()
-
-        val errorMessage = try {
-            BufferedReader(InputStreamReader(compilationProcess.inputStream)).use { reader ->
-                reader.readText()
-            }
-        } catch (e: IOException) {
-            e.stackTraceToString()
-        }
-
-        println(errorMessage)
-
+        Runtime.getRuntime().exec(command).waitFor()
     }
 }
 
