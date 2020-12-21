@@ -6,13 +6,22 @@ import edu.hm.cs.coolpile.dto.CompileResult
 import org.springframework.util.Base64Utils
 import java.io.File
 
-// TODO: Think of way to handle different services (RISCV, JAVA, ...)
 fun CompileRequest.compileInContainer(sessionId: String, service: AvailableService): CompileResult {
 
     val sourceCode = String(Base64Utils.decodeFromString(sourceCode), Charsets.UTF_8)
     File("$sessionId.c").writeText(sourceCode)
 
-    Runtime.getRuntime().exec("./src/main/shell/compile.sh $sessionId ${service.name}").waitFor()
+    val command = arrayOf(
+            "./src/main/shell/compile.sh",
+            sessionId,
+            service.name,
+            service.cmd,
+            service.params,
+            service.inputFileSuffix,
+            service.outputFileSuffix
+    )
+
+    Runtime.getRuntime().exec(command).waitFor()
 
     val assemblyFile = File("$sessionId.s")
     val assembly = assemblyFile.readText(Charsets.UTF_8)
