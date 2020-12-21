@@ -1,6 +1,6 @@
 package edu.hm.cs.coolpile
 
-import edu.hm.cs.coolpile.config.ServiceConfiguration
+import edu.hm.cs.coolpile.config.ServiceDescription
 import edu.hm.cs.coolpile.dto.CompileRequest
 import edu.hm.cs.coolpile.dto.CompileResult
 import org.springframework.web.bind.annotation.GetMapping
@@ -24,7 +24,8 @@ class CompileController {
     }
 
     @GetMapping("/services")
-    fun services(): ServiceConfiguration = configuration
+    fun services(): List<ServiceDescription> =
+            configuration.services.map { ServiceDescription(it.name, it.description) }
 
     private fun String.throwIfSubPathIsEmpty(): String {
         if (this == "/services") {

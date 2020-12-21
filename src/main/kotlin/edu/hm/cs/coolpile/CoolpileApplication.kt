@@ -1,14 +1,11 @@
 package edu.hm.cs.coolpile
 
 import com.beust.klaxon.Klaxon
-import edu.hm.cs.coolpile.config.AvailableService
+import edu.hm.cs.coolpile.config.CompilationService
 import edu.hm.cs.coolpile.config.ServiceConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import java.io.BufferedReader
 import java.io.File
-import java.io.IOException
-import java.io.InputStreamReader
 
 @SpringBootApplication
 class CoolpileApplication
@@ -29,7 +26,7 @@ fun main(args: Array<String>) {
     runApplication<CoolpileApplication>(*args)
 }
 
-private fun AvailableService.createDockerImageIfNecessary() {
+private fun CompilationService.createDockerImageIfNecessary() {
     val returnCode = Runtime.getRuntime().exec("docker image inspect coolpile-$name").waitFor()
     if (returnCode != 0) {
         println("Docker image for service $name doesn't exist and will be created now.")

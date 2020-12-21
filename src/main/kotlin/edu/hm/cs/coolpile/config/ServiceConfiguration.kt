@@ -2,12 +2,12 @@ package edu.hm.cs.coolpile.config
 
 import edu.hm.cs.coolpile.exception.ServiceNotFoundException
 
-class ServiceConfiguration(val services: Array<AvailableService>) {
+class ServiceConfiguration(val services: Array<CompilationService>) {
     fun getServiceByName(serviceName: String) = services.firstOrNull { it.name == serviceName }
             ?: throw ServiceNotFoundException("Service '$serviceName' not found.")
 }
 
-class AvailableService(
+class CompilationService(
         val name: String,
         val description: String,
         val install: String,
@@ -16,3 +16,5 @@ class AvailableService(
         val inputFileSuffix: String,
         val outputFileSuffix: String
 )
+
+class ServiceDescription(val name: String, val description: String)
