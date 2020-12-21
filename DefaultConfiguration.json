@@ -1,9 +1,21 @@
 {
   "services": [
     {
-      "cmd": "gcc -S temp.c",
-      "name": "riscv",
-      "fileSuffix" : ".c",
+      "name": "c-riscv",
+      "description": "Compiles C code to RISC-V assembly.",
+      "install": "apt install -y gcc-riscv64-linux-gnu",
+      "cmd": "riscv64-linux-gnu-gcc",
+      "params": "-S",
+      "inputFileSuffix" : ".c",
+      "outputFileSuffix" : ".s"
+    },
+    {
+      "name": "c-x86",
+      "description": "Compiles C code to x86 assembly.",
+      "install": "apt install -y gcc",
+      "cmd": "gcc",
+      "params": "-S",
+      "inputFileSuffix" : ".c",
       "outputFileSuffix" : ".s"
     }
   ]

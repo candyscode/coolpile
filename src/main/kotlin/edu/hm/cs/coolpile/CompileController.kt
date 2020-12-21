@@ -16,12 +16,16 @@ class CompileController {
 
     @PostMapping("/services/**")
     fun serviceWildcard(request: HttpServletRequest, @RequestBody compileRequest: CompileRequest): CompileResult {
-        return compileRequest.compileInContainer(request.session.id)
+        val apiEndpoint = request.requestURI.removePrefix("/services/").throwIfSubPathIsEmpty()
+        return compileRequest.compileInContainer(
+                service = configuration.getServiceByName(apiEndpoint),
+                sessionId = request.session.id
+        )
     }
 
     @PostMapping("/local/**")
     fun localServiceWildcard(request: HttpServletRequest, @RequestBody compileRequest: CompileRequest): CompileResult {
-        val apiEndpoint = request.requestURI.removePrefix("/services/").throwIfSubPathIsEmpty()
+        val apiEndpoint = request.requestURI.removePrefix("/local/").throwIfSubPathIsEmpty()
         return compileRequest.compileLocallyWithService(
                 service = configuration.getServiceByName(apiEndpoint),
                 sessionId = request.session.id

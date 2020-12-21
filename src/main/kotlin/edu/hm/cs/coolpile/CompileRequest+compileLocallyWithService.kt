@@ -20,10 +20,11 @@ fun CompileRequest.compileLocallyWithService(service: AvailableService, sessionI
 
     println("Compile job started.")
 
-    File("$sessionId${service.fileSuffix}").writeText(sourceCode)
+    File("$sessionId${service.inputFileSuffix}").writeText(sourceCode)
 
-    val compilationProcess = Runtime.getRuntime().exec(service.cmd)
-    println("Waiting for compiling job to finish...")
+    val compilationProcess = Runtime
+            .getRuntime()
+            .exec("${service.cmd} ${service.params} $sessionId${service.inputFileSuffix}")
 
     val exitValue = compilationProcess.waitFor()
 
