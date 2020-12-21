@@ -1,10 +1,14 @@
 package edu.hm.cs.coolpile
 
 import com.beust.klaxon.Klaxon
+import edu.hm.cs.coolpile.config.AvailableService
 import edu.hm.cs.coolpile.config.ServiceConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import java.io.BufferedReader
 import java.io.File
+import java.io.IOException
+import java.io.InputStreamReader
 
 @SpringBootApplication
 class CoolpileApplication
@@ -18,7 +22,33 @@ fun main(args: Array<String>) {
     configuration = Klaxon().parse<ServiceConfiguration>(configFile)
             ?: throw IllegalArgumentException("Exception occurred during parsing of Config File.")
 
+    println("Configuration import successful.")
+
+    configuration.services.toList().forEach { it.createDockerImageIfNecessary() }
+
     runApplication<CoolpileApplication>(*args)
+}
+
+private fun AvailableService.createDockerImageIfNecessary() {
+    val returnCode = Runtime.getRuntime().exec("docker image inspect coolpile-$name").waitFor()
+    if (returnCode != 0) {
+        println("Docker image for service $name doesn't exist and will be created now.")
+
+        val command = arrayOf("./src/main/shell/createDockerImage.sh", name, install)
+        val compilationProcess = Runtime.getRuntime().exec(command)
+        compilationProcess.waitFor()
+
+        val errorMessage = try {
+            BufferedReader(InputStreamReader(compilationProcess.inputStream)).use { reader ->
+                reader.readText()
+            }
+        } catch (e: IOException) {
+            e.stackTraceToString()
+        }
+
+        println(errorMessage)
+
+    }
 }
 
 private fun hostIsCompatible(): Boolean {

@@ -1,7 +1,7 @@
 #!/bin/bash
 SESSION_ID="$1"
 
-docker run -t -d --name "$SESSION_ID" coolpile-riscv
+docker run -t -d --name "$SESSION_ID" coolpile-"$2"
 docker cp "$SESSION_ID".c "$SESSION_ID":/"$SESSION_ID".c
 docker exec "$SESSION_ID" gcc -S "$SESSION_ID".c
 docker cp "$SESSION_ID":/"$SESSION_ID".s .
