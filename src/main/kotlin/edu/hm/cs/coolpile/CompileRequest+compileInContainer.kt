@@ -13,7 +13,7 @@ fun CompileRequest.compileInContainer(sessionId: String, service: CompilationSer
     val timestampBefore = System.currentTimeMillis()
 
     val sourceCode = String(Base64Utils.decodeFromString(sourceCode), Charsets.UTF_8)
-    File("$sessionId.c").writeText(sourceCode)
+    File("$sessionId${service.inputFileSuffix}").writeText(sourceCode)
 
     val command = arrayOf(
             "./src/main/shell/compile.sh",

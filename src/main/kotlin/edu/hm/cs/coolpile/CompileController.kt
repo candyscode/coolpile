@@ -23,6 +23,9 @@ class CompileController {
         )
     }
 
+    @GetMapping("/test")
+    fun test() = "Geht."
+
     @GetMapping("/services")
     fun services(): List<ServiceDescription> =
             configuration.services.map { ServiceDescription(it.name, it.description) }

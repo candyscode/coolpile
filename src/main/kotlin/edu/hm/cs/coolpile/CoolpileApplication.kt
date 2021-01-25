@@ -1,3 +1,9 @@
+// SERVICE HINZUFUEGEN during runtime (AUTH)
+// Konzept (viele Bilder) und evaluierung kapitel hinzufügen
+// Starten von vorhandenem docker img anstelle von install
+// Webservices Chapter: Warum kein Cluster System => Client flexibel halten, einfach einbindbar
+// Demo Client
+
 package edu.hm.cs.coolpile
 
 import com.beust.klaxon.Klaxon
