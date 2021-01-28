@@ -1,4 +1,4 @@
-package edu.hm.cs.coolpile
+package edu.hm.cs.coolpile.config
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
@@ -14,8 +14,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/services").authenticated()
-                .antMatchers("/test").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
                 .and()
                 .httpBasic()
     }
@@ -26,6 +25,6 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
         auth.inMemoryAuthentication()
                 .withUser("admin")
                 .password("{noop}password")
-                .roles("USER")
+                .roles("ADMIN")
     }
 }

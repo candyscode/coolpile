@@ -32,7 +32,7 @@ fun main(args: Array<String>) {
     runApplication<CoolpileApplication>(*args)
 }
 
-private fun CompilationService.createDockerImageIfNecessary() {
+fun CompilationService.createDockerImageIfNecessary() {
     val returnCode = Runtime.getRuntime().exec("docker image inspect coolpile-$name").waitFor()
     if (returnCode != 0) {
         println("Docker image for service $name doesn't exist and will be created now.")

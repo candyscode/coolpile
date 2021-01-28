@@ -38,7 +38,7 @@ class GlobalExceptionHandler {
         val httpStatus = HttpStatus.BAD_REQUEST
         val errorDTO = Error(
                 status = httpStatus.name,
-                errorType = "Illegal Arguments for Request",
+                errorType = "Illegal Arguments",
                 message = ex.message ?: "",
                 time = Date().toString()
         )
