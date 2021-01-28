@@ -27,11 +27,11 @@ fun CompileRequest.compileInContainer(sessionId: String, service: CompilationSer
 
     Runtime.getRuntime().exec(command).waitFor()
 
-    val assemblyFile = File("$sessionId.s")
+    val assemblyFile = File("$sessionId${service.outputFileSuffix}")
     val assembly = assemblyFile.readText(Charsets.UTF_8)
 
     assemblyFile.delete()
-    File("$sessionId.c").delete()
+    File("$sessionId${service.inputFileSuffix}").delete()
 
     return CompileResult(
             assembly = Base64Utils.encodeToString(assembly.toByteArray()),
