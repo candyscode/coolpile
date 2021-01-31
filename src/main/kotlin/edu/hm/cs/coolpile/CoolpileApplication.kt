@@ -33,11 +33,19 @@ fun main(args: Array<String>) {
 }
 
 fun CompilationService.createDockerImageIfNecessary() {
+    if (image.startsWith("INSTALL:")) {
+        image.removePrefix("INSTALL:")
+    } else if (image.startsWith("PROVIDED:")) {
+        image.removePrefix("PROVIDED:")
+    } else {
+        throw IllegalArgumentException("")
+    }
+
     val returnCode = Runtime.getRuntime().exec("docker image inspect coolpile-$name").waitFor()
     if (returnCode != 0) {
         println("Docker image for service $name doesn't exist and will be created now.")
 
-        val command = arrayOf("./src/main/shell/createDockerImage.sh", name, install)
+        val command = arrayOf("./src/main/shell/createDockerImage.sh", name, image)
         Runtime.getRuntime().exec(command).waitFor()
     }
 }

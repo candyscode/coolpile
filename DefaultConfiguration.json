@@ -3,7 +3,7 @@
     {
       "name": "c-riscv",
       "description": "Compiles C code to RISC-V assembly.",
-      "install": "apt-get install -y gcc-riscv64-linux-gnu",
+      "image": "INSTALL:apt-get install -y gcc-riscv64-linux-gnu",
       "cmd": "riscv64-linux-gnu-gcc",
       "params": "-S",
       "inputFileSuffix" : ".c",
@@ -12,7 +12,7 @@
     {
       "name": "c-x86",
       "description": "Compiles C code to x86 assembly.",
-      "install": "apt-get install -y gcc",
+      "image": "INSTALL:apt-get install -y gcc",
       "cmd": "gcc",
       "params": "-S",
       "inputFileSuffix" : ".c",

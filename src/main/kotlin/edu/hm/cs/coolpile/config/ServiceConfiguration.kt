@@ -10,7 +10,7 @@ class ServiceConfiguration(val services: Array<CompilationService>) {
 class CompilationService(
         val name: String,
         val description: String,
-        val install: String,
+        val image: String,
         val cmd: String,
         val params: String,
         val inputFileSuffix: String,
