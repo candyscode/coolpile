@@ -12,6 +12,7 @@ import edu.hm.cs.coolpile.config.ServiceConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import java.io.File
+import java.lang.IllegalStateException
 
 @SpringBootApplication
 class CoolpileApplication
@@ -33,22 +34,32 @@ fun main(args: Array<String>) {
 }
 
 fun CompilationService.createDockerImageIfNecessary() {
-    if (image.startsWith("INSTALL:")) {
-        image.removePrefix("INSTALL:")
-    } else if (image.startsWith("PROVIDED:")) {
-        image.removePrefix("PROVIDED:")
-    } else {
-        throw IllegalArgumentException("")
-    }
+    when {
+        imageIsInstallable() -> {
+            val returnCode = Runtime.getRuntime().exec("docker image inspect coolpile-$name").waitFor()
+            if (returnCode != 0) {
+                println("Docker image for service $name doesn't exist and will be created now.")
 
-    val returnCode = Runtime.getRuntime().exec("docker image inspect coolpile-$name").waitFor()
-    if (returnCode != 0) {
-        println("Docker image for service $name doesn't exist and will be created now.")
-
-        val command = arrayOf("./src/main/shell/createDockerImage.sh", name, image)
-        Runtime.getRuntime().exec(command).waitFor()
+                val installCommand = image.removePrefix("INSTALL:")
+                val command = arrayOf("./src/main/shell/createDockerImage.sh", name, installCommand)
+                Runtime.getRuntime().exec(command).waitFor()
+            }
+        }
+        imageIsProvided() -> {
+            val imageName = image.removePrefix("PROVIDED:")
+            val returnCode = Runtime.getRuntime().exec("docker image inspect $imageName}").waitFor()
+            if (returnCode != 0) {
+                throw IllegalStateException("Couldn't find Docker image $imageName")
+            }
+        }
+        else -> {
+            throw IllegalStateException("Invalid Image reference")
+        }
     }
 }
+
+private fun CompilationService.imageIsInstallable() = image.startsWith("INSTALL:")
+private fun CompilationService.imageIsProvided() = image.startsWith("PROVIDED:")
 
 private fun hostIsCompatible(): Boolean {
     val compilationProcess = Runtime.getRuntime().exec("docker -v")
