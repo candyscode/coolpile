@@ -62,17 +62,11 @@ private fun CompilationService.imageIsInstallable() = image.startsWith("INSTALL:
 private fun CompilationService.imageIsProvided() = image.startsWith("PROVIDED:")
 
 private fun hostIsCompatible(): Boolean {
-    val compilationProcess = Runtime.getRuntime().exec("docker -v")
-
-    return when (compilationProcess.waitFor()) {
-        0 -> true
-        127 -> {
-            println("Docker is not installed on this machine. Install Docker and run this command again.")
-            false
-        }
-        else -> {
-            println("There is a problem with your Docker installation. Coolpile cannot be started.")
-            false
-        }
+    return try {
+        Runtime.getRuntime().exec("docker -v").waitFor()
+        true
+    } catch (e: Exception) {
+        println("There is an issue with the docker installation on this host: $e")
+        false
     }
 }
