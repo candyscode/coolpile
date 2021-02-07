@@ -21,6 +21,10 @@ lateinit var configuration: ServiceConfiguration
 
 fun main(args: Array<String>) {
     if (!hostIsCompatible()) return
+    if (args.size != 1) {
+        println("No default configuration JSON provided.")
+        return
+    }
 
     val configFile = File(args[0]).readText()
     configuration = Klaxon().parse<ServiceConfiguration>(configFile)
