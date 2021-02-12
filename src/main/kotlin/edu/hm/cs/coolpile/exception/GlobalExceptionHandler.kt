@@ -1,6 +1,6 @@
 package edu.hm.cs.coolpile.exception
 
-import edu.hm.cs.coolpile.dto.Error
+import edu.hm.cs.coolpile.model.dto.Error
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -10,31 +10,9 @@ import java.util.*
 
 @ControllerAdvice
 class GlobalExceptionHandler {
-    @ExceptionHandler(CompilationException::class)
-    fun generateGCCException(ex: CompilationException): ResponseEntity<Error> {
-        val httpStatus = HttpStatus.BAD_REQUEST
-        val errorDTO = Error(
-                status = httpStatus.name,
-                errorType = "Compilation Error",
-                message = ex.message,
-                time = Date().toString()
-        )
-        return ResponseEntity<Error>(errorDTO, httpStatus)
-    }
 
-    @ExceptionHandler(ServiceNotFoundException::class)
-    fun generateServiceNotFoundException(ex: ServiceNotFoundException): ResponseEntity<Error> {
-        val httpStatus = HttpStatus.BAD_REQUEST
-        val errorDTO = Error(
-                status = httpStatus.name,
-                errorType = "Service not found",
-                message = ex.message,
-                time = Date().toString()
-        )
-        return ResponseEntity<Error>(errorDTO, httpStatus)
-    }
     @ExceptionHandler(IllegalArgumentException::class)
-    fun generateServiceNotFoundException(ex: IllegalArgumentException): ResponseEntity<Error> {
+    fun generateIllegalArgumentException(ex: IllegalArgumentException): ResponseEntity<Error> {
         val httpStatus = HttpStatus.BAD_REQUEST
         val errorDTO = Error(
                 status = httpStatus.name,

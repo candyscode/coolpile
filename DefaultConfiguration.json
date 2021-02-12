@@ -1,5 +1,5 @@
 {
-  "services": [
+  "compilers": [
     {
       "name": "c-riscv",
       "description": "Compiles C code to RISC-V assembly.",

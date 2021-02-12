@@ -1,4 +1,4 @@
-package edu.hm.cs.coolpile.config
+package edu.hm.cs.coolpile.security
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
