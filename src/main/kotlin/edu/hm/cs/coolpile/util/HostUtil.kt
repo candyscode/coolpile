@@ -14,9 +14,7 @@ private fun Process.runOnHost(onErrorAction: () -> Unit): String {
     val returnCode = waitFor()
 
     val stdError = BufferedReader(InputStreamReader(errorStream))
-
-    val errorString = stdError.lines().collect(Collectors.joining(","))
-    if (errorString.isNotEmpty()) println(errorString)
+    val errorString = stdError.lines().collect(Collectors.joining("\n"))
 
     if (returnCode != 0) onErrorAction()
 

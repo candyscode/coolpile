@@ -40,7 +40,7 @@ class CompilerService(
                 outputFileSuffix
         )
 
-        runOnHost(command)
+        val errorStreamText = runOnHost(command).replace(sessionId, sessionIdReplacement)
 
         val assemblyFile = File("$sessionId$outputFileSuffix")
         val assembly = assemblyFile.readText(Charsets.UTF_8)
@@ -50,8 +50,10 @@ class CompilerService(
         File("$sessionId$inputFileSuffix").delete()
 
         return CompileResult(
-                assembly = Base64Utils.encodeToString(assembly.toByteArray()),
-                compilationTime = (System.currentTimeMillis() - timestampBefore).toString()
+                assembly = assembly.toBase64(),
+                compilationTime = (System.currentTimeMillis() -
+                        timestampBefore).toString() + timeSuffix,
+                errorStream = errorStreamText.toBase64()
         )
     }
 
@@ -60,19 +62,19 @@ class CompilerService(
             println("Docker image for service $name doesn't exist and will be created now.")
 
             val command = arrayOf(imageCreationCommand, name, imageSpecifier)
-            runOnHost(command)
+            runOnHost(command) { throw IllegalStateException("Error while creating docker image.") }
         }
     }
 
     private fun checkImage(imageSpecifier: String) =
-            runOnHost("$inspectCommand $imageSpecifier}") {
+            runOnHost("$inspectCommand $imageSpecifier") {
                 throw IllegalStateException("Couldn't find Docker image $imageSpecifier")
             }
 
     private val String.imageType: ImageType
         get() = when {
-            startsWith("INSTALL:") -> INSTALL
-            startsWith("PROVIDED:") -> PROVIDED
+            startsWith(installPrefix) -> INSTALL
+            startsWith(providedPrefix) -> PROVIDED
             else -> throw IllegalArgumentException("Unexpected image type for compiler service.")
         }
 
@@ -84,6 +86,8 @@ class CompilerService(
         return imageSpecifier
     }
 
+    private fun String.toBase64() = Base64Utils.encodeToString(toByteArray())
+
     private enum class ImageType { INSTALL, PROVIDED }
 
     companion object {
@@ -91,5 +95,9 @@ class CompilerService(
         private const val installImageNamePrefix = "coolpile-"
         private const val imageCreationCommand = "./src/main/shell/createDockerImage.sh"
         private const val compileCommand = "./src/main/shell/compile.sh"
+        private const val timeSuffix = " ms"
+        private const val sessionIdReplacement = "YOURFILE"
+        private const val installPrefix = "INSTALL:"
+        private const val providedPrefix = "PROVIDED:"
     }
 }

@@ -1,3 +1,3 @@
 package edu.hm.cs.coolpile.model.dto
 
-class CompileResult(val compilationTime: String, val assembly: String)
+class CompileResult(val compilationTime: String, val assembly: String, val errorStream: String)
