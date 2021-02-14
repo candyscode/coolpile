@@ -7,7 +7,6 @@ import edu.hm.cs.coolpile.util.runOnHost
 import org.springframework.util.Base64Utils
 import java.io.File
 
-@SuppressWarnings("")
 class CompilerService(
         val name: String,
         val description: String,
@@ -27,8 +26,9 @@ class CompilerService(
 
     fun compile(sourceCode: String, sessionId: String): CompileResult {
         val timestampBefore = System.currentTimeMillis()
+        val decodedSourceCode = String(Base64Utils.decodeFromString(sourceCode))
 
-        File("$sessionId$inputFileSuffix").writeText(sourceCode)
+        File("$sessionId$inputFileSuffix").writeText(decodedSourceCode)
 
         val command = arrayOf(
                 compileCommand,

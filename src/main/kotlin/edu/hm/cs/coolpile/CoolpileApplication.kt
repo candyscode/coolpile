@@ -30,6 +30,7 @@ fun main(args: Array<String>) {
 private fun hostIsCompatible(): Boolean {
     return try {
         Runtime.getRuntime().exec("docker -v").waitFor()
+        Runtime.getRuntime().exec("docker info").waitFor()
         true
     } catch (e: Exception) {
         println("There is an issue with the docker installation on this host: $e")

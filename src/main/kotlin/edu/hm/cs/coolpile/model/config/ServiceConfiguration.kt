@@ -4,9 +4,11 @@ import com.beust.klaxon.Klaxon
 import edu.hm.cs.coolpile.model.compiler.CompilerService
 import edu.hm.cs.coolpile.model.dto.ConfigurationModel
 import java.io.File
+import java.lang.IllegalStateException
 
 class ServiceConfiguration(configFile: File) {
-    val compilers: List<CompilerService>
+    var compilers: List<CompilerService>
+        private set
 
     init {
         val configText = configFile.readText()
@@ -18,5 +20,24 @@ class ServiceConfiguration(configFile: File) {
         compilers.forEach {
             compilerService -> compilerService.initialize()
         }
+    }
+
+    fun addCompiler(compiler: CompilerService): List<CompilerService> {
+        compiler.initialize()
+        compilers = compilers + compiler
+        return compilers
+    }
+
+    fun removeCompiler(compilerName: String): List<CompilerService> {
+        val oldListSize = compilers.size
+        val targetCompiler = compilers.firstOrNull {
+            compilerService -> compilerService.name == compilerName
+        } ?: throw IllegalArgumentException("Compiler could not be found for deletion.")
+
+        compilers = compilers - targetCompiler
+        if (oldListSize >= compilers.size) {
+            throw IllegalStateException("Compiler $compilerName could not be removed.")
+        }
+        return compilers
     }
 }
