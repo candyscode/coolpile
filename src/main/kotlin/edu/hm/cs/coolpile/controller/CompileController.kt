@@ -1,6 +1,6 @@
 package edu.hm.cs.coolpile.controller
 
-import edu.hm.cs.coolpile.exception.CompilerNotFoundException
+import edu.hm.cs.coolpile.exception.InvalidEndpointException
 import edu.hm.cs.coolpile.model.compiler.CompilerService
 import edu.hm.cs.coolpile.model.config.ServiceConfiguration
 import edu.hm.cs.coolpile.model.compiler.CompilerServiceDescription
@@ -35,11 +35,11 @@ class CompileController(val serviceConfiguration: ServiceConfiguration) {
         val compilerName = requestURI.removePrefix("/compiler/")
 
         if (compilerName.length >= requestURI.length || compilerName.contains("/")) {
-            throw CompilerNotFoundException("Compiler $compilerName not found.")
+            throw InvalidEndpointException("Compiler $compilerName not found.")
         }
 
         return serviceConfiguration.compilers.firstOrNull { compilerService ->
             compilerService.name == compilerName
-        } ?: throw CompilerNotFoundException("Compiler $compilerName not found.")
+        } ?: throw InvalidEndpointException("Compiler $compilerName not found.")
     }
 }

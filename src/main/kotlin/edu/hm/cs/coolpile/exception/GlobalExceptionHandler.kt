@@ -12,13 +12,19 @@ import java.util.*
 class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException::class)
-    fun generateIllegalArgumentException(ex: IllegalArgumentException): ResponseEntity<Error> {
-        val httpStatus = HttpStatus.BAD_REQUEST
+    fun generateIllegalArgumentException(exception: IllegalArgumentException): ResponseEntity<Error> =
+            exception.generate("Illegal Arguments", HttpStatus.BAD_REQUEST)
+
+    @ExceptionHandler(InvalidEndpointException::class)
+    fun generateInvalidEndpointException(exception: InvalidEndpointException): ResponseEntity<Error> =
+            exception.generate("Invalid Endpoint", HttpStatus.NOT_FOUND)
+
+    private fun Exception.generate(errorType: String, httpStatus: HttpStatus): ResponseEntity<Error> {
         val errorDTO = Error(
-                status = httpStatus.name,
-                errorType = "Illegal Arguments",
-                message = ex.message ?: "",
-                time = Date().toString()
+                status = httpStatus.value().toString(),
+                error = errorType,
+                message = message ?: "",
+                timestamp = Date().toString()
         )
         return ResponseEntity<Error>(errorDTO, httpStatus)
     }
