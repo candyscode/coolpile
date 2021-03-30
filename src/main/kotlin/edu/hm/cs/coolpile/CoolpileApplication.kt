@@ -15,8 +15,13 @@ import java.io.File
 
 @SpringBootApplication
 class CoolpileApplication(private val applicationArguments: ApplicationArguments) {
+    
     @Bean
     fun serviceConfiguration(): ServiceConfiguration {
+        if(applicationArguments.sourceArgs.isEmpty()) {
+            return ServiceConfiguration(null)
+        }
+
         return ServiceConfiguration(File(applicationArguments.sourceArgs[0]))
     }
 }
