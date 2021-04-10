@@ -1,9 +1,3 @@
-// SERVICE HINZUFUEGEN during runtime (AUTH) X
-// Konzept (viele Bilder) und evaluierung kapitel hinzufügen
-// Starten von vorhandenem docker img anstelle von install X
-// Webservices Chapter: Warum kein Cluster System => Client flexibel halten, einfach einbindbar
-// Demo Client
-
 package edu.hm.cs.coolpile
 
 import edu.hm.cs.coolpile.model.config.ServiceConfiguration
