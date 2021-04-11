@@ -41,7 +41,7 @@ class ServiceConfiguration(configFile: File?) {
         } ?: throw IllegalArgumentException("Compiler could not be found for deletion.")
 
         compilers = compilers - targetCompiler
-        if (oldListSize >= compilers.size) {
+        if (oldListSize <= compilers.size) {
             throw IllegalStateException("Compiler $compilerName could not be removed.")
         }
         return compilers

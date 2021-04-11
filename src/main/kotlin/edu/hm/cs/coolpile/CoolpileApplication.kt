@@ -1,6 +1,7 @@
 package edu.hm.cs.coolpile
 
 import edu.hm.cs.coolpile.model.config.ServiceConfiguration
+import edu.hm.cs.coolpile.util.hostIsCompatible
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -23,16 +24,4 @@ class CoolpileApplication(private val applicationArguments: ApplicationArguments
 fun main(args: Array<String>) {
     if (!hostIsCompatible()) return
     runApplication<CoolpileApplication>(*args)
-}
-
-
-private fun hostIsCompatible(): Boolean {
-    return try {
-        Runtime.getRuntime().exec("docker -v").waitFor()
-        Runtime.getRuntime().exec("docker info").waitFor()
-        true
-    } catch (e: Exception) {
-        println("There is an issue with the docker installation on this host: $e")
-        false
-    }
 }

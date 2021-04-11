@@ -93,7 +93,7 @@ class CompilerService(
     companion object {
         private const val inspectCommand = "docker image inspect"
         private const val installImageNamePrefix = "coolpile-"
-        private const val imageCreationCommand = ".createDockerImage.sh"
+        private const val imageCreationCommand = "./createDockerImage.sh"
         private const val compileCommand = "./compile.sh"
         private const val timeSuffix = " ms"
         private const val sessionIdReplacement = "YOURFILE"

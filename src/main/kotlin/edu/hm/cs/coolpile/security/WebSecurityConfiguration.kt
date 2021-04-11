@@ -8,13 +8,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 
 @Configuration
-class SecurityConfig : WebSecurityConfigurerAdapter() {
+class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
-        http.csrf().disable()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.POST,"/compiler").authenticated()
-                .antMatchers(HttpMethod.DELETE,"/compiler/**").authenticated()
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/compiler").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/compiler/**").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .httpBasic()
